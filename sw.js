@@ -15,30 +15,33 @@ var cacheURLs = [
       '/data/restaurants.json'
     ]
 
-/* on service worker install event add items to cache */
+/* on service worker install event populate the cache */
 self.addEventListener('install', function(event) {
   event.waitUntil(
     caches.open(cacheID).then(function(cache) {
-      console.log('cache opened!');
+      console.log('Cache opened!');
       return cache.addAll(cacheURLs);
     })
   );
 });
 
-/* fetch the network request */
+/* fetch the network request, update cache, return response */
 self.addEventListener('fetch', function(event) {
   event.respondWith(
-    caches.match(event.request)
-      .then(function(response) {
-        if (response) {    /* if match in cache return that */
-          console.log(response.url);
-          return response;
-        }
-        return fetch(event.request);    /* or just return network request as usual */
-      }
-    )
+    caches.match(event.request).then(function(response) {
+      return response || fetch(event.request).then(function(respond) {
+        let clone = respond.clone();
+        caches.open('restaurant-reviews-v1').then(function(cache) {
+          cache.put(event.request, clone);
+        });
+        return respond;
+      });
+    }).catch(function() {
+      return new Response("Unable to update");
+    })
   );
 });
+
 
 
 
