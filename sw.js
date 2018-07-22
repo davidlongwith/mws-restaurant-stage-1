@@ -36,7 +36,7 @@ self.addEventListener('fetch', function(event) {
         return respond;
       });
     }).catch(function() {
-      return new Response("Unable to update");
+      return new Response("Content is currently not available offline.");
     })
   );
 });
