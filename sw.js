@@ -1,6 +1,4 @@
 
-
-
 var cacheID = "restaurant-reviews-v1";
 var cacheURLs = [
       '/',
@@ -10,7 +8,6 @@ var cacheURLs = [
       '/js/dbhelper.js',
       '/js/main.js',
       '/js/restaurant_info.js',
-      '/register_sw.js',
       '/sw.js',
       '/data/restaurants.json'
     ]
