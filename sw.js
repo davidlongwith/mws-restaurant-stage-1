@@ -27,6 +27,9 @@ self.addEventListener('fetch', function(event) {
     caches.match(event.request).then(function(response) {
       return response || fetch(event.request).then(function(respond) {
         let clone = respond.clone();
+        if(!respond || respond.status !== 200 || respond.type !== 'basic') {
+          return respond;
+        }
         caches.open('restaurant-reviews-v1').then(function(cache) {
           cache.put(event.request, clone);
         });
